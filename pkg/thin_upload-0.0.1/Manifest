@@ -1,0 +1,5 @@
+Manifest
+README.rdoc
+Rakefile
+lib/thin_upload.rb
+lib/thin_upload/parser.rb

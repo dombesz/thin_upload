@@ -1,0 +1,22 @@
+=Installation
+
+  gem install thin_upload
+  
+=Usage
+
+  Upload progress is available for any file upload request.
+  
+  Example:
+  <iframe id="upload_frame" name="upload_frame" style="width: 0px; height: 0px;"></iframe>
+  
+  <%= form_tag(photos_path, {:multipart => true ,:target=>"upload_frame"}) do %>
+    <%= text_field_tag :uuid, UUID.new.generate %>
+    <%= file_field_tag :file %>
+    <p><%= submit_tag "Continue &rarr;".html_safe, :id=>'submit_form' %></p>
+  <% end %>
+  
+  While your upload is processing you can request the progress from rack.
+  
+  @progress = request.env['rack.progress'][params[:uuid]]
+  
+  @progress is an array, the first element is the progress, the second one is a boolean which indicates if the request is finished.
