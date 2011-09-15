@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Dombi Attila}]
-  s.date = %q{2011-09-09}
+  s.date = %q{2011-09-15}
   s.description = %q{thin_upload provides upload progress measuring functionality for thin ruby server, progresses can be accessed via rack middleware.}
   s.email = %q{dombesz.attila@gmail.com}
   s.extra_rdoc_files = [%q{README.rdoc}, %q{lib/thin_upload.rb}, %q{lib/thin_upload/parser.rb}]
