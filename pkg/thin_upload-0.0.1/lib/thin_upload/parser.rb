@@ -17,6 +17,9 @@ module Thin
         
     # +new_parse+ method extends the original +parse+ method's
     # functionality with the upload progress tracking
+    # Arguments:
+    #  data: (String) 
+    
     def new_parse(data)
       success = thin_parse(data) #execute the the original +parse+ method
       uuid = scan_upload(data)
@@ -34,23 +37,32 @@ module Thin
     #TODO: Check if these methods can be hidden from the original +Request+ class
 
     # Check if the request needs progress tracking
+    # Arguments:
+    #  data: (String) 
     def scan_upload(data)
       @upload_uuid ||= data.scan(UPLOAD_REQUEST_REGEXP).flatten.first
     end
     
     # Calculating the progress based on +content_length+ and received body size +@received_size+
+    # Arguments:
+    #  size: (Integer) 
     def calculate_progress(size)
       @received_size = @received_size.to_i + size #adding received chunk size to received size
       @received_size > content_length ? 100 : ((@received_size/content_length.to_f)*100).to_i
     end
     
     #progress can be accessed via +request.env['rack.progress']+ in the app
+    # Arguments:
+    #  uuid: (String) 
+    #  progress: (Integer)     
     def store_progress(uuid, progress)
       Thin::Server::progress[uuid] = progress if uuid #storing the progress with the uiid
       @env.merge!(RACK_PROGRESS=>Thin::Server::progress.clone) if finished? #merging the progress hash into the environment
     end
     
     # deleting progress entry from +Thin::Server::progress+ if the upload is finished and the result was requested
+    # Arguments:
+    #  data: (String) 
     def cleanup_progress_hash(data)
       req_uuid = data.scan(PROGRESS_REQUEST_REGEXP).flatten.first #check if we got a progress request
       Thin::Server::progress.delete(req_uuid) if Thin::Server::progress[req_uuid] == 100 && finished? #delete when progress is returned and 100%
