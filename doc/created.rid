@@ -1,17 +1,7 @@
-Fri, 30 Sep 2011 13:09:10 +0300
+Fri, 30 Sep 2011 13:21:53 +0300
 ./Gemfile	Fri, 30 Sep 2011 11:59:03 +0300
 ./lib/thin_upload/parser.rb	Fri, 30 Sep 2011 12:58:43 +0300
 ./lib/thin_upload.rb	Tue, 23 Aug 2011 17:11:55 +0300
 ./Manifest	Fri, 30 Sep 2011 13:02:17 +0300
-./pkg/thin_upload-0.0.1/Gemfile	Fri, 30 Sep 2011 11:59:03 +0300
-./pkg/thin_upload-0.0.1/lib/thin_upload/parser.rb	Fri, 30 Sep 2011 12:58:43 +0300
-./pkg/thin_upload-0.0.1/lib/thin_upload.rb	Tue, 23 Aug 2011 17:11:55 +0300
-./pkg/thin_upload-0.0.1/Manifest	Fri, 30 Sep 2011 13:02:17 +0300
-./pkg/thin_upload-0.0.1/Rakefile	Tue, 27 Sep 2011 15:50:13 +0300
-./pkg/thin_upload-0.0.1/README.rdoc	Fri, 30 Sep 2011 13:08:58 +0300
-./pkg/thin_upload-0.0.1/test/test_helper.rb	Fri, 30 Sep 2011 12:14:22 +0300
-./pkg/thin_upload-0.0.1/test/thin_upload/parser_test.rb	Fri, 30 Sep 2011 13:01:22 +0300
 ./Rakefile	Tue, 27 Sep 2011 15:50:13 +0300
-./README.rdoc	Fri, 30 Sep 2011 13:08:58 +0300
-./test/test_helper.rb	Fri, 30 Sep 2011 12:14:22 +0300
-./test/thin_upload/parser_test.rb	Fri, 30 Sep 2011 13:01:22 +0300
+./README.rdoc	Fri, 30 Sep 2011 13:16:05 +0300

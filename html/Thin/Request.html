@@ -93,13 +93,7 @@
         <h3 class="section-header">Files</h3>
         <ul>
         
-          <li class="file"><a href="../Gemfile.html">Gemfile</a></li>
-        
-          <li class="file"><a href="../Manifest.html">Manifest</a></li>
-        
           <li class="file"><a href="../README_rdoc.html">README.rdoc</a></li>
-        
-          <li class="file"><a href="../Rakefile.html">Rakefile</a></li>
         
         </ul>
       </div>
@@ -139,6 +133,11 @@
 
     <div id="description" class="description">
       
+<p>The <a href="Request.html">Request</a> class takes part of the <a
+href="../Thin.html">Thin</a> module which is responsible for incomming web
+requests for thin server. The class is opened up here for adding
+functionality to track  progress of file uploads.</p>
+
     </div><!-- description -->
 
     
@@ -157,17 +156,17 @@
         
           <dt><a name="PROGRESS_REQUEST_REGEXP">PROGRESS_REQUEST_REGEXP</a></dt>
           
-          <dd class="description"></dd>
+          <dd class="description"><p>regexp to identify upload progress requests</p></dd>
           
         
           <dt><a name="RACK_PROGRESS">RACK_PROGRESS</a></dt>
           
-          <dd class="description"><p>Freeze Rack header name</p></dd>
+          <dd class="description"><p>Freeze Rack header for progress hash</p></dd>
           
         
           <dt><a name="UPLOAD_REQUEST_REGEXP">UPLOAD_REQUEST_REGEXP</a></dt>
           
-          <dd class="description"><p>Freeze some regexps</p></dd>
+          <dd class="description"><p>Freeze some regexps regexp to identify file upload</p></dd>
           
         
         </dl>
@@ -202,7 +201,7 @@ size +@received_size+</p>
             
             <div class="method-source-code" id="calculate_progress-source">
 <pre>
-<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 39</span>
+<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 42</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">calculate_progress</span>(<span class="ruby-identifier">size</span>)
   <span class="ruby-ivar">@received_size</span> = <span class="ruby-ivar">@received_size</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">size</span> <span class="ruby-comment">#adding received chunk size to received size</span>
   <span class="ruby-ivar">@received_size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">content_length</span> <span class="ruby-operator">?</span> <span class="ruby-value">100</span> <span class="ruby-operator">:</span> ((<span class="ruby-ivar">@received_size</span><span class="ruby-operator">/</span><span class="ruby-identifier">content_length</span>.<span class="ruby-identifier">to_f</span>)*<span class="ruby-value">100</span>).<span class="ruby-identifier">to_i</span>
@@ -238,7 +237,7 @@ upload is finished and the result was requested</p>
             
             <div class="method-source-code" id="cleanup_progress_hash-source">
 <pre>
-<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 51</span>
+<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 54</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">cleanup_progress_hash</span>(<span class="ruby-identifier">data</span>)
   <span class="ruby-identifier">req_uuid</span> = <span class="ruby-identifier">data</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-constant">PROGRESS_REQUEST_REGEXP</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">first</span> <span class="ruby-comment">#check if we got a progress request</span>
   <span class="ruby-constant">Thin</span><span class="ruby-operator">::</span><span class="ruby-constant">Server</span><span class="ruby-operator">::</span><span class="ruby-identifier">progress</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">req_uuid</span>) <span class="ruby-keyword">if</span> <span class="ruby-constant">Thin</span><span class="ruby-operator">::</span><span class="ruby-constant">Server</span><span class="ruby-operator">::</span><span class="ruby-identifier">progress</span>[<span class="ruby-identifier">req_uuid</span>] <span class="ruby-operator">==</span> <span class="ruby-value">100</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">finished?</span> <span class="ruby-comment">#delete when progress is returned and 100%</span>
@@ -273,7 +272,7 @@ functionality with the upload progress tracking</p>
             
             <div class="method-source-code" id="new_parse-source">
 <pre>
-<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 17</span>
+<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 20</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new_parse</span>(<span class="ruby-identifier">data</span>)
   <span class="ruby-identifier">success</span> = <span class="ruby-identifier">thin_parse</span>(<span class="ruby-identifier">data</span>) <span class="ruby-comment">#execute the the original +parse+ method</span>
   <span class="ruby-identifier">uuid</span> = <span class="ruby-identifier">scan_upload</span>(<span class="ruby-identifier">data</span>)
@@ -348,7 +347,7 @@ functionality with the upload progress tracking</p>
             
             <div class="method-source-code" id="scan_upload-source">
 <pre>
-<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 34</span>
+<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">scan_upload</span>(<span class="ruby-identifier">data</span>)
   <span class="ruby-ivar">@upload_uuid</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-constant">UPLOAD_REQUEST_REGEXP</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">first</span>
 <span class="ruby-keyword">end</span></pre>
@@ -382,7 +381,7 @@ href="http://'rack.progress'">request.env</a>+ in the app</p>
             
             <div class="method-source-code" id="store_progress-source">
 <pre>
-<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 45</span>
+<span class="ruby-comment"># File lib/thin_upload/parser.rb, line 48</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">store_progress</span>(<span class="ruby-identifier">uuid</span>, <span class="ruby-identifier">progress</span>)
   <span class="ruby-constant">Thin</span><span class="ruby-operator">::</span><span class="ruby-constant">Server</span><span class="ruby-operator">::</span><span class="ruby-identifier">progress</span>[<span class="ruby-identifier">uuid</span>] = <span class="ruby-identifier">progress</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">uuid</span> <span class="ruby-comment">#storing the progress with the uiid</span>
   <span class="ruby-ivar">@env</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-constant">RACK_PROGRESS</span>=<span class="ruby-operator">&gt;</span><span class="ruby-constant">Thin</span><span class="ruby-operator">::</span><span class="ruby-constant">Server</span><span class="ruby-operator">::</span><span class="ruby-identifier">progress</span>.<span class="ruby-identifier">clone</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">finished?</span> <span class="ruby-comment">#merging the progress hash into the environment</span>

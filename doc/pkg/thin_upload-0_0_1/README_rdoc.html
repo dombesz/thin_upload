@@ -100,29 +100,31 @@
 
 <h1>Usage</h1>
 
-<pre>In your Gemfile
-  gem 'thin'
-  gem 'thin-upload'
+<p>In your <a href="../../Gemfile.html">Gemfile</a></p>
 
-Note: Works only with thin server!
+<pre>gem 'thin'
+gem 'thin-upload'</pre>
 
-Upload progress is available for any file upload request.
+<p>Note: Works only with thin server!</p>
 
-Example:
-&lt;iframe id=&quot;upload_frame&quot; name=&quot;upload_frame&quot; style=&quot;width: 0px; height: 0px;&quot;&gt;&lt;/iframe&gt;
+<p>Upload progress is available for any file upload request.</p>
+
+<p>Example:</p>
+
+<pre>&lt;iframe id=&quot;upload_frame&quot; name=&quot;upload_frame&quot; style=&quot;width: 0px; height: 0px;&quot;&gt;&lt;/iframe&gt;
 
 &lt;%= form_tag(photos_path, {:multipart =&gt; true ,:target=&gt;&quot;upload_frame&quot;}) do %&gt;
   &lt;%= text_field_tag :uuid, UUID.new.generate %&gt;
   &lt;%= file_field_tag :file %&gt;
   &lt;p&gt;&lt;%= submit_tag &quot;Continue &amp;rarr;&quot;.html_safe, :id=&gt;'submit_form' %&gt;&lt;/p&gt;
-&lt;% end %&gt;
+&lt;% end %&gt;</pre>
 
-To have progress tracking, we need to send a +uuid param in the submited form, 
-and the +uuid param MUST be before the file field.
+<p>To have progress tracking, we need to send a +uuid param in the submited
+form,  and the +uuid param MUST be before the file field.</p>
 
-While your upload is processing you can request the progress from rack.
+<p>While your upload is processing you can request the progress from rack.</p>
 
-@progress = request.env['rack.progress'][params[:uuid]]
+<pre>@progress = request.env['rack.progress'][params[:uuid]]
 @progress is an integer in range 0..100 or nil if doesn't exists</pre>
 
   </div>

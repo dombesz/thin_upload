@@ -1,15 +1,18 @@
-# The Request class takes part of the Thin module which is responsible
-# for incomming web requests for thin server.
-# The class is opened up here for adding functionality to track 
-# progress of file uploads.
-
+#Thin module from thin server
 module Thin
+  # The Request class takes part of the Thin module which is responsible
+  # for incomming web requests for thin server.
+  # The class is opened up here for adding functionality to track 
+  # progress of file uploads.
+  
   class Request
-    #Freeze Rack header name
+    #Freeze Rack header for progress hash
     RACK_PROGRESS = 'rack.progress'.freeze
     
     #Freeze some regexps
+    #regexp to identify file upload
     UPLOAD_REQUEST_REGEXP = /uuid\"\r\n\r\n(.*)\r/i.freeze
+    #regexp to identify upload progress requests 
     PROGRESS_REQUEST_REGEXP = /uuid=(.*) /.freeze
         
     # +new_parse+ method extends the original +parse+ method's
@@ -55,6 +58,7 @@ module Thin
   end
 end
 module Thin
+  # Thin's server class
   class Server
     #adding a hash to store all the upload progress in the server
     def self.progress
