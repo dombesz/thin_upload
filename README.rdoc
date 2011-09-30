@@ -1,8 +1,14 @@
-=Installation
+=Install
 
   gem install thin_upload
   
 =Usage
+
+  In your Gemfile
+    gem 'thin'
+    gem 'thin-upload'
+
+  Note: Works only with thin server!
 
   Upload progress is available for any file upload request.
   
@@ -15,8 +21,10 @@
     <p><%= submit_tag "Continue &rarr;".html_safe, :id=>'submit_form' %></p>
   <% end %>
   
+  To have progress tracking, we need to send a +uuid param in the submited form, 
+  and the +uuid param MUST be before the file field.
+  
   While your upload is processing you can request the progress from rack.
   
   @progress = request.env['rack.progress'][params[:uuid]]
-  
-  @progress is an array, the first element is the progress, the second one is a boolean which indicates if the request is finished.
+  @progress is an integer in range 0..100 or nil if doesn't exists
