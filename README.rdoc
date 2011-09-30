@@ -1,6 +1,6 @@
 =Install
 
-  gem install thin_upload
+  gem install thin_upload --pre
   
 =Usage
 
@@ -28,3 +28,5 @@ While your upload is processing you can request the progress from rack.
 
   @progress = request.env['rack.progress'][params[:uuid]]
   @progress is an integer in range 0..100 or nil if doesn't exists
+  
+Note: This is just an experiment, so I don't know if it's production ready. Any suggestions are welcome.
