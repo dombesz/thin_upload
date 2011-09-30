@@ -5,8 +5,8 @@
 =Usage
 
 In your Gemfile
-  gem 'thin'
-  gem 'thin-upload'
+  gem "thin"
+  gem "thin_upload", "~> 0.0.1.pre"
 
 Note: Works only with thin server!
 
