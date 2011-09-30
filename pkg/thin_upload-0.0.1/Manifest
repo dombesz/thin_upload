@@ -1,9 +1,0 @@
-Gemfile
-Gemfile.lock
-Manifest
-README.rdoc
-Rakefile
-lib/thin_upload.rb
-lib/thin_upload/parser.rb
-test/test_helper.rb
-test/thin_upload/parser_test.rb

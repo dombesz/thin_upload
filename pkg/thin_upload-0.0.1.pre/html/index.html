@@ -22,7 +22,41 @@
   <h1>RDoc Documentation</h1>
 
   
-  <p>This is the API documentation for 'RDoc Documentation'.</p>
+  <div id="main">
+    
+
+<pre>gem install thin_upload</pre>
+
+<h1>Usage</h1>
+
+<p>In your Gemfile</p>
+
+<pre>gem 'thin'
+gem 'thin-upload'</pre>
+
+<p>Note: Works only with thin server!</p>
+
+<p>Upload progress is available for any file upload request.</p>
+
+<p>Example:</p>
+
+<pre>&lt;iframe id=&quot;upload_frame&quot; name=&quot;upload_frame&quot; style=&quot;width: 0px; height: 0px;&quot;&gt;&lt;/iframe&gt;
+
+&lt;%= form_tag(photos_path, {:multipart =&gt; true ,:target=&gt;&quot;upload_frame&quot;}) do %&gt;
+  &lt;%= text_field_tag :uuid, UUID.new.generate %&gt;
+  &lt;%= file_field_tag :file %&gt;
+  &lt;p&gt;&lt;%= submit_tag &quot;Continue &amp;rarr;&quot;.html_safe, :id=&gt;'submit_form' %&gt;&lt;/p&gt;
+&lt;% end %&gt;</pre>
+
+<p>To have progress tracking, we need to send a +uuid param in the submited
+form,  and the +uuid param MUST be before the file field.</p>
+
+<p>While your upload is processing you can request the progress from rack.</p>
+
+<pre>@progress = request.env['rack.progress'][params[:uuid]]
+@progress is an integer in range 0..100 or nil if doesn't exists</pre>
+
+  </div>
   
 
   
@@ -30,13 +64,7 @@
   <h2>Files</h2>
   <ul>
     
-      <li class="file"><a href="Gemfile.html">Gemfile</a></li>
-    
-      <li class="file"><a href="Manifest.html">Manifest</a></li>
-    
       <li class="file"><a href="README_rdoc.html">README.rdoc</a></li>
-    
-      <li class="file"><a href="Rakefile.html">Rakefile</a></li>
     
   </ul>
   
