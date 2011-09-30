@@ -5,6 +5,8 @@ end
 require 'rubygems'
 require 'rake'
 require 'echoe'
+require 'rake/testtask'
+
 
 Echoe.new('thin_upload', '0.0.1') do |p|
   p.summary                  = "Upload progress meter for thin ruby server."
@@ -17,3 +19,10 @@ Echoe.new('thin_upload', '0.0.1') do |p|
 end
 
 Dir["#{File.dirname(__FILE__)}/tasks/*.rake"].sort.each { |ext| load ext }
+
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+end
+
+desc "Run tests"
+task :default => :test
