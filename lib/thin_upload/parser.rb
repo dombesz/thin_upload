@@ -22,7 +22,7 @@ module Thin
     
     def new_parse(data)
       success = thin_parse(data) #execute the the original +parse+ method
-      uuid = scan_upload(data)
+      uuid = scan_uuid(data)
       progress = calculate_progress(data.size) if uuid
       store_progress(uuid, progress)      
       cleanup_progress_hash(data)
@@ -39,7 +39,7 @@ module Thin
     # Check if the request needs progress tracking
     # Arguments:
     #  data: (String) 
-    def scan_upload(data)
+    def scan_uuid(data)
       @upload_uuid ||= data.scan(UPLOAD_REQUEST_REGEXP).flatten.first
     end
     

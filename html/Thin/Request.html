@@ -73,7 +73,7 @@
           
           <li><a href="#method-i-parse">#parse</a></li>
           
-          <li><a href="#method-i-scan_upload">#scan_upload</a></li>
+          <li><a href="#method-i-scan_uuid">#scan_uuid</a></li>
           
           <li><a href="#method-i-store_progress">#store_progress</a></li>
           
@@ -281,7 +281,7 @@ functionality with the upload progress tracking Arguments:</p>
 <span class="ruby-comment"># File lib/thin_upload/parser.rb, line 23</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new_parse</span>(<span class="ruby-identifier">data</span>)
   <span class="ruby-identifier">success</span> = <span class="ruby-identifier">thin_parse</span>(<span class="ruby-identifier">data</span>) <span class="ruby-comment">#execute the the original +parse+ method</span>
-  <span class="ruby-identifier">uuid</span> = <span class="ruby-identifier">scan_upload</span>(<span class="ruby-identifier">data</span>)
+  <span class="ruby-identifier">uuid</span> = <span class="ruby-identifier">scan_uuid</span>(<span class="ruby-identifier">data</span>)
   <span class="ruby-identifier">progress</span> = <span class="ruby-identifier">calculate_progress</span>(<span class="ruby-identifier">data</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">uuid</span>
   <span class="ruby-identifier">store_progress</span>(<span class="ruby-identifier">uuid</span>, <span class="ruby-identifier">progress</span>)      
   <span class="ruby-identifier">cleanup_progress_hash</span>(<span class="ruby-identifier">data</span>)
@@ -334,12 +334,12 @@ functionality with the upload progress tracking Arguments:</p>
         </div><!-- parse-method -->
 
       
-        <div id="scan_upload-method" class="method-detail ">
-          <a name="method-i-scan_upload"></a>
+        <div id="scan_uuid-method" class="method-detail ">
+          <a name="method-i-scan_uuid"></a>
 
           
           <div class="method-heading">
-            <span class="method-name">scan_upload</span><span
+            <span class="method-name">scan_uuid</span><span
               class="method-args">(data)</span>
             <span class="method-click-advice">click to toggle source</span>
           </div>
@@ -353,20 +353,20 @@ functionality with the upload progress tracking Arguments:</p>
             
 
             
-            <div class="method-source-code" id="scan_upload-source">
+            <div class="method-source-code" id="scan_uuid-source">
 <pre>
 <span class="ruby-comment"># File lib/thin_upload/parser.rb, line 42</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">scan_upload</span>(<span class="ruby-identifier">data</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">scan_uuid</span>(<span class="ruby-identifier">data</span>)
   <span class="ruby-ivar">@upload_uuid</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-constant">UPLOAD_REQUEST_REGEXP</span>).<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">first</span>
 <span class="ruby-keyword">end</span></pre>
-            </div><!-- scan_upload-source -->
+            </div><!-- scan_uuid-source -->
             
           </div>
 
           
 
           
-        </div><!-- scan_upload-method -->
+        </div><!-- scan_uuid-method -->
 
       
         <div id="store_progress-method" class="method-detail ">

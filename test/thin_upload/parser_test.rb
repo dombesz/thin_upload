@@ -7,11 +7,12 @@ class ParserTest < Test::Unit::TestCase
     @request = new_request(body)
   end
   
-  def test_scan_upload
-    assert_equal @request.scan_upload(upload_data_string), uuid
+  def test_scan_uuid
+    assert_equal @request.scan_uuid(upload_data_string), uuid
   end  
   
   def test_calculate_progress
+    assert_equal @request.instance_variable_get(:@received_size), nil
     assert_equal @request.calculate_progress(10), 10
     assert_equal @request.calculate_progress(50), 60
     assert_equal @request.calculate_progress(40), 100
