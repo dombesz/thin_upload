@@ -1,3 +1,5 @@
+{<img src="http://travis-ci.org/dombesz/thin_upload.png" />}[http://travis-ci.org/dombesz/thin_upload]
+
 =Install
 
   gem install thin_upload --pre
