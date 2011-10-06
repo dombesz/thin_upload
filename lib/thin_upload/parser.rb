@@ -23,8 +23,7 @@ module Thin
     def new_parse(data)
       success = thin_parse(data) #execute the the original +parse+ method
       uuid = scan_uuid(data)
-      progress = calculate_progress(data.size) if uuid
-      store_progress(uuid, progress)      
+      store_progress(uuid, calculate_progress) if uuid
       cleanup_progress_hash(data)
       success #returns the result from Thin's parse method
     end
@@ -40,15 +39,27 @@ module Thin
     # Arguments:
     #  data: (String) 
     def scan_uuid(data)
-      @upload_uuid ||= data.scan(UPLOAD_REQUEST_REGEXP).flatten.first
+       @upload_uuid ||= scan_body(UPLOAD_REQUEST_REGEXP)
+    end
+
+    # Scans the received body for the desired regex
+    # Arguments:
+    #   regexp: (Regexp or String)
+    def scan_body(regexp)
+      if body.size < MAX_BODY #limiting scanning length to avoid performance hit
+        original_pos = body.pos #storing current body position
+        body.rewind #rewinding body 
+        result = body.read.scan(regexp).flatten.first
+        body.seek(original_pos) #seeking back to original position
+      end
+      result
     end
     
     # Calculating the progress based on +content_length+ and received body size +@received_size+
     # Arguments:
-    #  size: (Integer) 
-    def calculate_progress(size)
-      @received_size = @received_size.to_i + size #adding received chunk size to received size
-      @received_size > content_length ? 100 : ((@received_size/content_length.to_f)*100).to_i
+    #  none
+    def calculate_progress
+      ((body.size/content_length.to_f)*100).to_i
     end
     
     #progress can be accessed via +request.env['rack.progress']+ in the app
