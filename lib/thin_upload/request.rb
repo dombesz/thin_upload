@@ -8,23 +8,25 @@ module Thin
   class Request
     #Freeze Rack header for progress hash
     RACK_PROGRESS = 'rack.progress'.freeze
-    
+        
     #Freeze some regexps
     #regexp to identify file upload
-    UPLOAD_REQUEST_REGEXP = /uuid\"\r\n\r\n(.*)\r/i.freeze
+    POST_REQUEST_REGEXP = /uuid\"\r\n\r\n(.*)\r/i.freeze
     #regexp to identify upload progress requests 
-    PROGRESS_REQUEST_REGEXP = /uuid=(.*) /.freeze
-        
+    GET_REQUEST_REGEXP = /uuid=(.*) /.freeze
+    attr_reader :parser
+    attr_accessor :data_buffer
+    
     # +new_parse+ method extends the original +parse+ method's
     # functionality with the upload progress tracking
     # Arguments:
     #  data: (String) 
     
     def new_parse(data)
+      scan_content(data) unless uuid_found_or_limit_reached?
       success = thin_parse(data) #execute the the original +parse+ method
-      uuid = scan_uuid(data)
-      store_progress(uuid, calculate_progress) if uuid
-      cleanup_progress_hash(data)
+      store_progress(@upload_uuid)
+      cleanup_progress_hash(@request_uuid)
       success #returns the result from Thin's parse method
     end
 
@@ -33,40 +35,41 @@ module Thin
     alias_method :thin_parse, :parse
     alias_method :parse, :new_parse    
 
-    #TODO: Check if these methods can be hidden from the original +Request+ class
-
-    # Check if the request needs progress tracking
+    # Scans unparsed data for uuids, the unparsed data 
+    # is stored in a string for buffering purposes
+    # which is deleted after the uuid has been found.
     # Arguments:
-    #  data: (String) 
-    def scan_uuid(data)
-       @upload_uuid ||= scan_body(UPLOAD_REQUEST_REGEXP)
-    end
+    #  data: (String)
 
-    # Scans the received body for the desired regex
-    # Arguments:
-    #   regexp: (Regexp or String)
-    def scan_body(regexp)
-      if body.size < MAX_BODY #limiting scanning length to avoid performance hit
-        original_pos = body.pos #storing current body position
-        body.rewind #rewinding body 
-        result = body.read.scan(regexp).flatten.first
-        body.seek(original_pos) #seeking back to original position
-      end
-      result
+    def scan_content(data)
+      @data_buffer = @data_buffer.to_s + data
+      @upload_uuid  ||= @data_buffer.scan(POST_REQUEST_REGEXP).flatten.first
+      @request_uuid ||= @data_buffer.scan(GET_REQUEST_REGEXP).flatten.first
     end
     
-    # Calculating the progress based on +content_length+ and received body size +@received_size+
+    # Checking if we still have to search for uuid's
     # Arguments:
     #  none
-    def calculate_progress
+    def uuid_found_or_limit_reached?
+      if @upload_uuid || @request_uuid || (body.size > MAX_BODY)
+        @data_buffer = nil
+        true
+      else
+        false
+      end
+    end
+
+    # Calculating the progress based on +content_length+ and received body size +body.size+
+    # Arguments:
+    #  none
+    def progress
       ((body.size/content_length.to_f)*100).to_i
     end
     
-    #progress can be accessed via +request.env['rack.progress']+ in the app
+    # progress can be accessed via +request.env['rack.progress']+ in the app
     # Arguments:
     #  uuid: (String) 
-    #  progress: (Integer)     
-    def store_progress(uuid, progress)
+    def store_progress(uuid)
       Thin::Server::progress[uuid] = progress if uuid #storing the progress with the uiid
       @env.merge!(RACK_PROGRESS=>Thin::Server::progress.clone) if finished? #merging the progress hash into the environment
     end
@@ -74,9 +77,8 @@ module Thin
     # deleting progress entry from +Thin::Server::progress+ if the upload is finished and the result was requested
     # Arguments:
     #  data: (String) 
-    def cleanup_progress_hash(data)
-      req_uuid = data.scan(PROGRESS_REQUEST_REGEXP).flatten.first #check if we got a progress request
-      Thin::Server::progress.delete(req_uuid) if Thin::Server::progress[req_uuid] == 100 && finished? #delete when progress is returned and 100%
+    def cleanup_progress_hash(req_uuid)
+      Thin::Server::progress.delete(req_uuid) if Thin::Server::progress[req_uuid] == 100 && finished?#delete when progress is returned and 100%
     end
   end
 end

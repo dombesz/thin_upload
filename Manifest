@@ -34,9 +34,10 @@ html/js/jquery.js
 html/js/quicksearch.js
 html/js/thickbox-compressed.js
 html/lib/thin_upload/parser_rb.html
+html/lib/thin_upload/request_rb.html
 html/lib/thin_upload_rb.html
 html/rdoc.css
 lib/thin_upload.rb
-lib/thin_upload/parser.rb
+lib/thin_upload/request.rb
 test/test_helper.rb
-test/thin_upload/parser_test.rb
+test/thin_upload/request_test.rb

@@ -8,7 +8,7 @@ require 'echoe'
 require 'rake/testtask'
 
 
-Echoe.new('thin_upload', '0.0.1.pre') do |p|
+Echoe.new('thin_upload', '0.0.1.pre2') do |p|
   p.summary                  = "Upload progress meter for thin ruby server."
   p.description              = "thin_upload provides upload progress measuring functionality for thin ruby server, progresses can be accessed via rack middleware."
   p.author                   = 'Dombi Attila'

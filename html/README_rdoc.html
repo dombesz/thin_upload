@@ -76,16 +76,19 @@
 
   <div id="documentation">
     
+<p><a href="http://travis-ci.org/dombesz/thin_upload"><img
+src="http://travis-ci.org/dombesz/thin_upload.png" /></a></p>
+
 <h1>Install</h1>
 
-<pre>gem install thin_upload</pre>
+<pre>gem install thin_upload --pre</pre>
 
 <h1>Usage</h1>
 
 <p>In your Gemfile</p>
 
-<pre>gem 'thin'
-gem 'thin-upload'</pre>
+<pre>gem &quot;thin&quot;
+gem &quot;thin_upload&quot;, &quot;~&gt; 0.0.1.pre&quot;</pre>
 
 <p>Note: Works only with thin server!</p>
 
@@ -104,10 +107,19 @@ gem 'thin-upload'</pre>
 <p>To have progress tracking, we need to send a +uuid param in the submited
 form,  and the +uuid param MUST be before the file field.</p>
 
+<p>If you want to ask for progress use get request.</p>
+
+<pre>$.getJSON('/progress?uuid='+$(&quot;#uuid&quot;).attr('value'),function(response){
+ //process response
+}</pre>
+
 <p>While your upload is processing you can request the progress from rack.</p>
 
 <pre>@progress = request.env['rack.progress'][params[:uuid]]
 @progress is an integer in range 0..100 or nil if doesn't exists</pre>
+
+<p>Note: This is just an experiment, so I don’t know if it’s production ready.
+Any suggestions are welcome.</p>
 
   </div>
 

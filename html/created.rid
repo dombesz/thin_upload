@@ -1,4 +1,4 @@
-Fri, 30 Sep 2011 17:37:17 +0300
-README.rdoc	Fri, 30 Sep 2011 13:16:05 +0300
-lib/thin_upload/parser.rb	Fri, 30 Sep 2011 17:36:23 +0300
-lib/thin_upload.rb	Tue, 23 Aug 2011 17:11:55 +0300
+Wed, 19 Oct 2011 12:03:24 +0300
+README.rdoc	Tue, 11 Oct 2011 13:05:54 +0300
+lib/thin_upload/request.rb	Wed, 19 Oct 2011 12:01:07 +0300
+lib/thin_upload.rb	Tue, 11 Oct 2011 11:18:50 +0300
