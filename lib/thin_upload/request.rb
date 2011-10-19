@@ -54,8 +54,6 @@ module Thin
       if @upload_uuid || @request_uuid || (body.size > MAX_BODY)
         @data_buffer = nil
         true
-      else
-        false
       end
     end
 

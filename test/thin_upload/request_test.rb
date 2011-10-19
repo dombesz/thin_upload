@@ -15,7 +15,8 @@ class RequestTest < Test::Unit::TestCase
     @request.scan_content(upload_data_string)
     assert_equal @request.instance_variable_get(:@upload_uuid), uuid
   end  
-  
+
+
   def test_store_data_in_buffer
     content  = "content"
     content2 = "content2"
@@ -44,6 +45,18 @@ class RequestTest < Test::Unit::TestCase
     @request.parse content
     assert_equal @request.data_buffer, nil
   end
+
+  def test_stop_parsing_when_url_uuid_found
+    assert !@request.uuid_found_or_limit_reached?
+    @request.scan_content(get_request("?uuid=#{uuid}"))
+    assert @request.uuid_found_or_limit_reached?
+  end  
+  
+  def test_stop_parsing_when_form_uuid_found
+    assert !@request.uuid_found_or_limit_reached?
+    @request.scan_content(upload_data_string)
+    assert @request.uuid_found_or_limit_reached?
+  end  
 
   def test_should_stop_parsing_when_body_size_limit_reached
     @request = new_request(post_request("a"))
