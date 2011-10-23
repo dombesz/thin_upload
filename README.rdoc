@@ -30,8 +30,8 @@ If you want to ask for progress use get request.
 
   $.getJSON('/progress?uuid='+$("#uuid").attr('value'),function(response){
    //process response
-  }
-
+  });
+  
 While your upload is processing you can request the progress from rack.
 
   @progress = request.env['rack.progress'][params[:uuid]]
