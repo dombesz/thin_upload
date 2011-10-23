@@ -23,7 +23,7 @@ module Thin
     #  data: (String) 
     
     def new_parse(data)
-      scan_content(data) unless uuid_found_or_limit_reached?
+      uuid_found_or_limit_reached ? clear_buffer : scan_content(data)  
       success = thin_parse(data) #execute the the original +parse+ method
       store_progress(@upload_uuid)
       cleanup_progress_hash(@request_uuid)
@@ -50,13 +50,17 @@ module Thin
     # Checking if we still have to search for uuid's
     # Arguments:
     #  none
-    def uuid_found_or_limit_reached?
-      if @upload_uuid || @request_uuid || (body.size > MAX_BODY)
-        @data_buffer = nil
-        true
-      end
+    def uuid_found_or_limit_reached
+      @upload_uuid || @request_uuid || (body.size > MAX_BODY)
     end
-
+    
+    # Clear the content buffer
+    # Argument:
+    #  none
+    def clear_buffer
+      @data_buffer = nil
+    end
+    
     # Calculating the progress based on +content_length+ and received body size +body.size+
     # Arguments:
     #  none
